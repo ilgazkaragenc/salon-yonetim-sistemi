@@ -128,13 +128,34 @@ with st.sidebar:
         "⚙️ Ayarlar"
     ])
     st.markdown("---")
-    st.info("Sistem Versiyonu: 3.0 (Gold Design)")
+    st.info("Sistem Versiyonu: 3.1 (Fix)")
 
 # --- 4. MODÜL: DASHBOARD (PATRON EKRANI) ---
 if menu == "📊 Dashboard (Patron)":
     st.title("📊 İşletme Özeti")
     conn = baglan()
     
-    # Veri Çekme
+    # Veri Çekme (Hata buradaydı, şimdi düzeltildi)
     try:
-        # Toplam M
+        # Toplam Müşteri
+        mus = pd.read_sql("SELECT count(*) FROM musteriler", conn).iloc[0,0]
+        
+        # Finansal Veriler
+        gelir = pd.read_sql("SELECT SUM(odenen_tutar) FROM randevular WHERE durum='Ödendi'", conn).iloc[0,0] or 0
+        gider = pd.read_sql("SELECT SUM(tutar) FROM giderler", conn).iloc[0,0] or 0
+        net_kar = gelir - gider
+        
+    except:
+        mus=0; gelir=0; gider=0; net_kar=0
+    finally:
+        conn.close()
+
+    # Üst Kartlar
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("👥 Toplam Müşteri", f"{mus}")
+    c2.metric("💰 Toplam Gelir", f"{gelir:,.0f} TL")
+    c3.metric("💸 Toplam Gider", f"{gider:,.0f} TL")
+    
+    # Kâr Durumuna Göre Renkli Kart
+    delta_color = "normal" if net_kar >= 0 else "inverse"
+    msg = "Kârdasın! 🚀" if net_kar >=
