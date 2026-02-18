@@ -6,10 +6,10 @@ from datetime import datetime
 # --- 1. SAYFA AYARLARI ---
 st.set_page_config(page_title="Salon Yönetimi", page_icon="✂️", layout="wide")
 
-# --- OKUNABİLİRLİK ODAKLI TASARIM (DARK MODE) ---
+# --- OKUNABİLİRLİK TAMİR EDİLMİŞ TASARIM ---
 st.markdown("""
 <style>
-    /* 1. Arka Planı Koyu Yap (Yazılar Beyaz Olacak) */
+    /* 1. Ana Arka Plan (Koyu) */
     .stApp {
         background-color: #0E1117;
         color: #FAFAFA;
@@ -21,30 +21,53 @@ st.markdown("""
         border-right: 1px solid #41444C;
     }
     
-    /* 3. Tüm Yazıları Zorla BEYAZ Yap (Okunmama ihtimalini bitirir) */
-    h1, h2, h3, h4, h5, h6, p, span, div, label {
+    /* 3. Genel Yazı Renkleri (Başlıklar vs Beyaz Olsun) */
+    h1, h2, h3, h4, h5, h6, p, label {
         color: #FAFAFA !important;
     }
+
+    /* --- 4. KRİTİK DÜZELTME: GİRİŞ KUTULARI --- */
+    /* Kutuların içi Beyaz, Yazılar SİYAH olsun */
     
-    /* 4. Kartlar (Metrics) - Koyu Gri Zemin, Beyaz Yazı */
+    /* Text Input ve Date Input Kutuları */
+    .stTextInput input, .stDateInput input, .stTimeInput input, .stNumberInput input {
+        background-color: #ffffff !important; /* Arka plan Beyaz */
+        color: #000000 !important; /* Yazı SİYAH */
+        border: 1px solid #ddd;
+    }
+    
+    /* Dropdown (Seçim Kutuları) */
+    div[data-baseweb="select"] > div {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+    
+    /* Seçeneklerin Rengi */
+    div[role="listbox"] ul {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    /* 5. Kartlar (Metrics) */
     div[data-testid="metric-container"] {
         background-color: #1F2229;
         border: 1px solid #41444C;
         padding: 15px;
         border-radius: 8px;
         color: #FAFAFA;
-        border-left: 5px solid #FFD700; /* Altın Sarısı Çizgi */
+        border-left: 5px solid #FFD700;
+    }
+    div[data-testid="metric-container"] label {
+        color: #dddddd !important; /* Kart başlıkları hafif gri */
+    }
+    div[data-testid="metric-container"] div {
+        color: #FAFAFA !important; /* Kart sayıları beyaz */
     }
     
-    /* 5. Tabloların İçi */
-    .stDataFrame {
-        background-color: #1F2229;
-    }
-    
-    /* 6. Butonlar - Altın Sarısı ve Siyah Yazı (Net Okunsun) */
+    /* 6. Butonlar - Altın Sarısı ve Siyah Yazı */
     .stButton>button {
         background-color: #FFD700;
-        color: #000000 !important; /* Buton yazısı siyah olsun */
+        color: #000000 !important;
         font-weight: bold;
         border-radius: 8px;
         border: none;
@@ -56,19 +79,13 @@ st.markdown("""
         color: #000000 !important;
     }
     
-    /* 7. Input Kutuları (Yazı yazılan yerler) */
-    .stTextInput>div>div>input {
-        color: white;
-        background-color: #262730;
-    }
-    .stDateInput>div>div>input {
-        color: white;
-    }
-    
     /* Başarı Mesajları */
     .stSuccess {
-        background-color: #155724;
-        color: white !important;
+        background-color: #d4edda;
+        color: #155724 !important;
+    }
+    .stSuccess p {
+        color: #155724 !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -104,7 +121,7 @@ with st.sidebar:
     st.markdown("---")
     menu = st.radio("MENÜ", ["📊 Dashboard", "📅 Randevu Takvimi", "➕ Yeni Randevu", "💰 Finans & Kasa", "👥 Müşteriler", "⚙️ Ayarlar"])
     st.markdown("---")
-    st.caption("v3.2 High Contrast")
+    st.caption("v3.3 Black Text Fix")
 
 # --- 4. DASHBOARD ---
 if menu == "📊 Dashboard":
